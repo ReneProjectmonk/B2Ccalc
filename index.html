@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>DÉCAAR CLV & Omzet Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+    .result {
+      background-color: #e8f5e9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>DÉCAAR Omzet & CLV Calculator</h1>
+
+  <label>Bezoekers per maand:
+    <input type="number" id="visitors" value="8000">
+  </label>
+  <label>Conversiepercentage (%):
+    <input type="number" id="conversion" step="0.1" value="3.5">
+  </label>
+  <label>Gemiddelde orderwaarde (€):
+    <input type="number" id="aov" value="90">
+  </label>
+  <label>Gemiddeld aantal aankopen per klant:
+    <input type="number" id="frequency" step="0.01" value="1.67">
+  </label>
+
+  <div class="result" id="output">
+    Jaaromzet: €0<br>
+    Aantal orders/jaar: 0<br>
+    Aantal unieke klanten: 0<br>
+    CLV: €0
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll("input");
+    const output = document.getElementById("output");
+
+    function calculate() {
+      const visitors = parseFloat(document.getElementById("visitors").value) * 12;
+      const conversion = parseFloat(document.getElementById("conversion").value) / 100;
+      const aov = parseFloat(document.getElementById("aov").value);
+      const frequency = parseFloat(document.getElementById("frequency").value);
+
+      const orders = visitors * conversion;
+      const revenue = orders * aov;
+      const customers = orders / frequency;
+      const clv = aov * frequency;
+
+      output.innerHTML = `
+        Jaaromzet: €${Math.round(revenue).toLocaleString('nl-NL')}<br>
+        Aantal orders/jaar: ${Math.round(orders)}<br>
+        Aantal unieke klanten: ${Math.round(customers)}<br>
+        CLV: €${clv.toFixed(2)}
+      `;
+    }
+
+    inputs.forEach(input => input.addEventListener("input", calculate));
+    calculate();
+  </script>
+</body>
+</html>
